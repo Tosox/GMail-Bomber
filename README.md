@@ -1,1 +1,1 @@
-# GMailBomber
+# GMail-Bomber

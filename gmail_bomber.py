@@ -26,6 +26,10 @@ class BomberOptions(object):
     @property
     def email_subject(self) -> str:
         return self.__email_subject
+    
+    @email_subject.setter
+    def email_subject(self, subject: str) -> None:
+        self.__email_subject = subject
         
     def __is_email_address(self, address: str) -> bool:
         if address.find('@') == -1:
