@@ -165,7 +165,7 @@ def save_fields() -> None:
     }
     
     # Save config on disk
-    with open('data.ini', 'w+') as configfile:
+    with open('data.ini', 'w+', encoding = 'utf-8') as configfile:
         config.write(configfile)
         
     print_text('> Saved all fields')
@@ -182,7 +182,7 @@ def load_fields() -> None:
     
     # Read config
     config = configparser.ConfigParser()
-    config.read('data.ini')
+    config.read('data.ini', encoding = 'utf-8')
     
     # Load config
     txt_attacker_name.delete('1.0', 'end')
