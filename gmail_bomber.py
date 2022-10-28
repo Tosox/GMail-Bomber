@@ -276,12 +276,17 @@ def server_login() -> smtplib.SMTP:
 
 is_sending = False
 def thread_send_emails() -> None:
+    """
+    Start the bombing
+    """
 
+    # Do nothing if we are already bombing
     global is_sending
     if is_sending:
         print_text('> Wait until the previous emails are sent')
         return
     
+    # Send emails
     email_thread = threading.Thread(target = send_emails)
     email_thread.start()
     
