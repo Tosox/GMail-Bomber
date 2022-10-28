@@ -5,6 +5,7 @@ import smtplib
 from email.message import EmailMessage
 from res.icon import runtime_icon
 import tkinter as tk
+import threading
 import tempfile
 import os
 
@@ -104,7 +105,7 @@ def create_gui() -> tk.Tk:
     btn_load_fields.place(x = 140, y = 270)
     
     # Send emails section
-    btn_send_mails = tk.Button(root, text = '>> Send <<', bg = 'black', fg = 'white', width = 15, command = send_emails)
+    btn_send_mails = tk.Button(root, text = '>> Send <<', bg = 'black', fg = 'white', width = 15, command = thread_send_emails)
     btn_send_mails.place(x = 260, y = 270)
     
     # Improvised separator
@@ -273,10 +274,25 @@ def server_login() -> smtplib.SMTP:
     
     return server
 
+is_sending = False
+def thread_send_emails() -> None:
+
+    global is_sending
+    if is_sending:
+        print_text('> Wait until the previous emails are sent')
+        return
+    
+    email_thread = threading.Thread(target = send_emails)
+    email_thread.start()
+    
+
 def send_emails() -> None:
     """
     Connect to server and send the emails
     """
+    
+    global is_sending
+    is_sending = True
     
     # Attempt to login
     email_server = server_login()
@@ -300,6 +316,7 @@ def send_emails() -> None:
     # Close connection to SMTP
     email_server.quit()
     print_text('> Emails have been sent successfully', 'green')
+    is_sending = False
 
 def main() -> None:
     """
