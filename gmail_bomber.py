@@ -244,7 +244,7 @@ def create_message() -> EmailMessage:
     
     # Create email
     msg = EmailMessage()
-    msg['Subject'] = email_subject + (u'\u200e' * message_number) # add unicode to subject so gmail does not stack the emails with \u200e being an invisible char >:)
+    msg['Subject'] = email_subject + (u'\u200e' * message_number) # Add Unicode to the subject so Gmail does not stack the emails, with \u200e being an invisible character >:)
     msg['From'] = f'{attacker_name} <{attacker_address}>'
     msg['To'] = victim_address
     msg.set_content(email_body)
