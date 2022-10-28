@@ -57,13 +57,13 @@ def create_gui() -> tk.Tk:
     # Attacker name section
     lbl_attacker_name = tk.Label(root, text = 'Attacker\'s name: ', bg = 'black', fg = 'white')
     lbl_attacker_name.place(x = 10, y = 15)
-    txt_attacker_name = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_attacker_name = tk.Entry(root, bg = 'black', fg = 'white', width = 35, insertbackground = 'white', font = ('Arial', 9))
     txt_attacker_name.place(x = 140, y = 15)
     
     # Attacker email address section
     lbl_attacker_address = tk.Label(root, text = 'Attacker\'s address: ', bg = 'black', fg = 'white')
     lbl_attacker_address.place(x = 10, y = 40)
-    txt_attacker_address = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_attacker_address = tk.Entry(root, bg = 'black', fg = 'white', width = 35, insertbackground = 'white', font = ('Arial', 9))
     txt_attacker_address.place(x = 140, y = 40)
     
     # Attacker email password section
@@ -75,25 +75,25 @@ def create_gui() -> tk.Tk:
     # Victim email address section
     lbl_victim_address = tk.Label(root, text = 'Victim\'s address: ', bg = 'black', fg = 'white')
     lbl_victim_address.place(x = 10, y = 90)
-    txt_victim_address = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_victim_address = tk.Entry(root, bg = 'black', fg = 'white', width = 35, insertbackground = 'white', font = ('Arial', 9))
     txt_victim_address.place(x = 140, y = 90)
     
     # Email amount section
     lbl_email_amount = tk.Label(root, text = 'Email amount: ', bg = 'black', fg = 'white')
     lbl_email_amount.place(x = 10, y = 115)
-    txt_email_amount = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_email_amount = tk.Entry(root, bg = 'black', fg = 'white', width = 35, insertbackground = 'white', font = ('Arial', 9))
     txt_email_amount.place(x = 140, y = 115)
     
     # Email subject section
     lbl_email_subject = tk.Label(root, text = 'Email subject: ', bg = 'black', fg = 'white')
     lbl_email_subject.place(x = 10, y = 140)
-    txt_email_subject = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 1, insertbackground = 'white', font = ('Arial', 9))
+    txt_email_subject = tk.Entry(root, bg = 'black', fg = 'white', width = 35, insertbackground = 'white', font = ('Arial', 9))
     txt_email_subject.place(x = 140, y = 140)
     
     # Email body section
     lbl_email_body = tk.Label(root, text = 'Email body: ', bg = 'black', fg = 'white')
     lbl_email_body.place(x = 10, y = 165)
-    txt_email_body = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 5, insertbackground = 'white', font = ('Arial', 9))
+    txt_email_body = tk.Text(root, bg = 'black', fg = 'white', width = 35, height = 5, insertbackground = 'white', wrap = 'none', font = ('Arial', 9))
     txt_email_body.place(x = 140, y = 165)
     
     # Save data section
