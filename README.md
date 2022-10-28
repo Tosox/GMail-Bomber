@@ -7,6 +7,10 @@
 
 **A basic email spammer developed in Python**
 
+## Important
+
+> ### Make sure to setup your Google Account correctly. Check the first part of this video for help: https://youtu.be/g_j6ILT-X0k
+
 ## Usage
 
 ### Run as python script:
