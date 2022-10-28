@@ -15,7 +15,7 @@
 > python gmail_bomber.py
 ```
 
-_Alternatively, simply execute ['start.bat']('start.bat')_
+_Alternatively, simply execute ['start.bat'](start.bat)_
 
 ### Run as executable:
 
@@ -24,10 +24,11 @@ _Alternatively, simply execute ['start.bat']('start.bat')_
 - Open a console window in the main directory and run
 
 ```cmd
+# Example
 > pyinstaller --icon=res/icon.ico --onefile --noconsole gmail_bomber.py
 ```
 
-_Alternatively, simply execute ['build.bat']('build.bat')_
+_Alternatively, simply execute ['build.bat'](build.bat)_
 
 ## Media
 
