@@ -100,7 +100,7 @@ def create_gui() -> tk.Tk:
     btn_save_fields.place(x = 20, y = 270)
     
     # Load data section
-    btn_load_fields = tk.Button(root, text = 'Load field', bg = 'black', fg = 'white', width = 15, command = load_fields)
+    btn_load_fields = tk.Button(root, text = 'Load fields', bg = 'black', fg = 'white', width = 15, command = load_fields)
     btn_load_fields.place(x = 140, y = 270)
     
     # Send emails section
@@ -136,11 +136,13 @@ def on_closing(gui: tk.Tk, iconfile_path: str):
         iconfile_path (str): Path to the temporary icon file
     """
     
+    # Delete icon
     try:
         os.remove(iconfile_path)
     except Exception:
         pass
     
+    # Exit
     gui.destroy()
     exit(0)
 
@@ -295,7 +297,7 @@ def send_emails() -> None:
         email_server.send_message(email_message)
         print_text(f'> Sent email number {i + 1}')
     
-    # Exit
+    # Close connection to SMTP
     email_server.quit()
     print_text('> Emails have been sent successfully', 'green')
 
