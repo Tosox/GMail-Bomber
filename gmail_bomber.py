@@ -221,7 +221,8 @@ def print_text(text: str, tag_color: str = 'white') -> None:
 # Main methods
 #
 
-def create_message(i: int) -> EmailMessage:
+message_number = 0
+def create_message() -> EmailMessage:
     """
     Create an email with all of the attributes
 
@@ -232,6 +233,8 @@ def create_message(i: int) -> EmailMessage:
         EmailMessage: Packed email
     """
     
+    global message_number
+    
     # Get user input
     victim_address = txt_victim_address.get('1.0', 'end-1c')
     email_subject = txt_email_subject.get('1.0', 'end-1c')
@@ -241,7 +244,7 @@ def create_message(i: int) -> EmailMessage:
     
     # Create email
     msg = EmailMessage()
-    msg['Subject'] = email_subject + (u'\u200e' * i) # add unicode to subject so gmail does not stack the emails with \u200e being an invisible char >:)
+    msg['Subject'] = email_subject + (u'\u200e' * message_number) # add unicode to subject so gmail does not stack the emails with \u200e being an invisible char >:)
     msg['From'] = f'{attacker_name} <{attacker_address}>'
     msg['To'] = victim_address
     msg.set_content(email_body)
@@ -295,7 +298,7 @@ def send_emails() -> None:
     """
     Connect to server and send the emails
     """
-    
+    global message_number
     global is_sending
     is_sending = True
     
@@ -314,9 +317,10 @@ def send_emails() -> None:
     
     # Send emails
     for i in range(amount):
-        email_message = create_message(i)
+        email_message = create_message()
         email_server.send_message(email_message)
         print_text(f'> Sent email number {i + 1}')
+        message_number += 1
     
     # Close connection to SMTP
     email_server.quit()
