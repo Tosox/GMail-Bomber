@@ -329,6 +329,7 @@ def send_emails() -> None:
     email_server = server_login()
     if not email_server:
         print_text('> The password doesn\'t match the email or you didn\'t setup your account correctly. \n> Check this video for help: https://youtu.be/g_j6ILT-X0k', 'red')
+        is_sending = False
         return
     
     # Check if user input is a number
@@ -336,6 +337,7 @@ def send_emails() -> None:
         amount = int(txt_email_amount.get())
     except ValueError:
         print_text('> Please enter a valid email amount', 'yellow')
+        is_sending = False
         return
     
     # Send emails
