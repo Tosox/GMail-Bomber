@@ -1,9 +1,10 @@
 # GMail-Bomber
 
-[![Python](https://img.shields.io/badge/Language-Python-yellow.svg?style=flat)](https://en.wikipedia.org/wiki/Python_(programming_language)) 
-[![SMTP](https://img.shields.io/badge/Library-SMTP-green.svg?style=flat)](https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol) 
-[![Code size](https://img.shields.io/github/languages/code-size/TosoxDev/GMail-Bomber?style=flat)](https://github.com/TosoxDev/GMail-Bomber)
-[![Lines of code](https://tokei.rs/b1/github/TosoxDev/GMail-Bomber)](https://github.com/TosoxDev/GMail-Bomber)
+[![](https://img.shields.io/badge/Language-Python-yellow.svg?style=flat)](https://en.wikipedia.org/wiki/Python_(programming_language)) 
+[![](https://img.shields.io/badge/Library-SMTP-green.svg?style=flat)](https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol) 
+[![](https://img.shields.io/github/languages/code-size/TosoxDev/GMail-Bomber?color=blue&label=Code%20size&style=flat)](https://github.com/TosoxDev/GMail-Bomber)
+[![](https://img.shields.io/tokei/lines/github/TosoxDev/GMail-Bomber?color=red&label=Total%20lines&style=flat)](https://github.com/TosoxDev/GMail-Bomber)
+[![](https://img.shields.io/github/downloads/TosoxDev/GMail-Bomber/total?color=green&label=Downloads&style=flat)](https://github.com/TosoxDev/GMail-Bomber/releases)
 
 **A basic email spammer developed in Python**
 
