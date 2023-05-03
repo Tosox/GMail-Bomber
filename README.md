@@ -10,15 +10,15 @@
 
 ## Important
 
-> ### Make sure to setup your Google Account correctly.
-> ### Check the first part of this video for help: https://youtu.be/g_j6ILT-X0k
+> ### Make sure to create an App Password for the sender's Google account.
+> ### Check this article for more information: https://support.google.com/accounts/answer/185833
 
 ## Usage
 
 ### Run as python script:
 
-```cmd
-> python gmail_bomber.py
+```bash
+> python ./gmail_bomber.py
 ```
 
 _Alternatively, simply execute ['start.bat'](start.bat)_
@@ -29,9 +29,9 @@ _Alternatively, simply execute ['start.bat'](start.bat)_
 
 - Open a console window in the main directory and run
 
-```cmd
+```bash
 # Example
-> pyinstaller --icon=res/icon.ico --onefile --noconsole gmail_bomber.py
+> pyinstaller --icon=res/icon.ico --onefile --noconsole ./gmail_bomber.py
 ```
 
 _Alternatively, simply execute ['build.bat'](build.bat)_
