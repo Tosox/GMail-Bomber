@@ -328,7 +328,7 @@ def send_emails() -> None:
     # Attempt to login
     email_server = server_login()
     if not email_server:
-        print_text('> The password doesn\'t match the email or you didn\'t setup your account correctly. \n> Check this video for help: https://youtu.be/g_j6ILT-X0k', 'red')
+        print_text('> The password doesn\'t match the email or you didn\'t setup your account correctly. \n> Check this article for more information: https://support.google.com/accounts/answer/185833', 'red')
         is_sending = False
         return
     
