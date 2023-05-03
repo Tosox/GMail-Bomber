@@ -10,8 +10,8 @@
 
 ## Important
 
-> ### Make sure to create an App Password for the sender's Google account.
-> ### Check this article for more information: https://support.google.com/accounts/answer/185833
+> Make sure to create an App Password for the sender's Google account.
+> Check this article for more information: https://support.google.com/accounts/answer/185833
 
 ## Usage
 
